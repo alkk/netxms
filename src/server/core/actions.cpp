@@ -374,7 +374,10 @@ static bool ExecuteActionScript(const TCHAR *script, const Event *event)
 	return success;
 }
 
-void SaveServerActionExecutionLog(uint64_t id, uint32_t code, const TCHAR* action, const TCHAR* channelName, const TCHAR* recipient, const TCHAR* subject, const TCHAR* body, bool success)
+/**
+ * Saves server action execution log message to DB
+ */
+static void SaveServerActionExecutionLog(uint64_t id, uint32_t code, const TCHAR* action, const TCHAR* channelName, const TCHAR* recipient, const TCHAR* subject, const TCHAR* body, bool success)
 {
    DB_HANDLE hdb = DBConnectionPoolAcquireConnection();
    DB_STATEMENT hStmt;
@@ -399,13 +402,11 @@ void SaveServerActionExecutionLog(uint64_t id, uint32_t code, const TCHAR* actio
 
    DBConnectionPoolReleaseConnection(hdb);
 
-
-
-   nxlog_debug_tag(DEBUG_TAG, 2, _T("ServerActionExecutionLog: "
-                                       "id %u, timestamp %u, code %u, action %s,"
-                                       " recipient %s, message %s, success %s"),
+   nxlog_debug_tag(DEBUG_TAG, 5, _T("ServerActionExecutionLog: "
+                                       "action id %u, action timestamp %u, action code %u, action name %s,"
+                                       " channel name %s, recipient %s, subject %s, message %s, success %s"),
                                        id, time(nullptr), code, action, 
-                                       recipient, body, success ? _T("True") : _T("False"));
+                                       channelName, recipient, subject, body, success ? _T("True") : _T("False"));
 }
 
 /**

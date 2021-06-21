@@ -354,7 +354,6 @@ void NotificationChannel::workerThread()
 void NotificationChannel::send(const TCHAR *recipient, const TCHAR *subject, const TCHAR *body)
 {
    m_notificationQueue.put(new NotificationMessage(recipient, subject, body));
-
 }
 
 /**
@@ -481,7 +480,7 @@ void NotificationChannel::writeNotificationLog(const TCHAR *recipient, const TCH
 
    DBConnectionPoolReleaseConnection(hdb);
 
-   nxlog_debug_tag(DEBUG_TAG, 2, _T("NotificationLog: id %u, channel %s, timestamp %u, recipient %s, subject %s, message %s, success %s"),
+   nxlog_debug_tag(DEBUG_TAG, 5, _T("NotificationLog: id %u, channel %s, timestamp %u, recipient %s, subject %s, message %s, success %s"),
     s_notificationId - 1, m_name, time(nullptr), recipient, subject, body, success ? _T("True") : _T("False"));
 }
 

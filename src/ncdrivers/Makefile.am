@@ -8,12 +8,12 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-DRIVERS = dbtable dummy gsm portech shell smtp snmptrap textfile @NCDRV_MODULES@
+DRIVERS = dbtable dummy gsm googlechat portech shell smtp snmptrap textfile @NCDRV_MODULES@
 
 SUBDIRS = $(DRIVERS)
 
 EXTRA_LTLIBRARIES = anysms.la kannel.la msteams.la mymobile.la nexmo.la nxagent.la slack.la smseagle.la telegram.la text2reach.la websms.la
-pkglib_LTLIBRARIES = dbtable.la dummy.la gsm.la portech.la shell.la smtp.la snmptrap.la textfile.la @NCDRV_LTLIBRARIES@
+pkglib_LTLIBRARIES = dbtable.la dummy.la gsm.la googlechat.la portech.la shell.la smtp.la snmptrap.la textfile.la @NCDRV_LTLIBRARIES@
 
 anysms_la_SOURCES = anysms/anysms.cpp
 anysms_la_CPPFLAGS=-I@top_srcdir@/include  -I@top_srcdir@/build
@@ -34,6 +34,11 @@ gsm_la_SOURCES = gsm/gsm.cpp gsm/pdumode.cpp
 gsm_la_CPPFLAGS=-I@top_srcdir@/include -I@top_srcdir@/build
 gsm_la_LDFLAGS = -module -avoid-version
 gsm_la_LIBADD = ../libnetxms/libnetxms.la
+
+googlechat_la_SOURCES = googlechat/googlechat.cpp
+googlechat_la_CPPFLAGS=-I@top_srcdir@/include -I@top_srcdir@/build
+googlechat_la_LDFLAGS = -module -avoid-version
+googlechat_la_LIBADD = ../libnetxms/libnetxms.la
 
 kannel_la_SOURCES = kannel/kannel.cpp
 kannel_la_CPPFLAGS=-I@top_srcdir@/include  -I@top_srcdir@/build

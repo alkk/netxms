@@ -646,18 +646,28 @@ void TelegramDriver::processUpdate(json_t *data)
          continue;
 
       const char *type = json_object_get_string_utf8(chat, "type", "unknown");
-      TCHAR *username = json_object_get_string_t(chat, (!strcmp(type, "group") || !strcmp(type, "channel")) ? "title" : "username", nullptr);
+      TCHAR *username = json_object_get_string_t(chat, (!strcmp(type, "group") || !strcmp(type, "channel") || !strcmp(type, "supergroup")) ? "title" : "username", nullptr);
       if (username == nullptr)
          continue;
 
-      // Check and create chat object
+      int64_t newId = json_object_get_integer(message, "migrate_to_chat_id", 0);
       MutexLock(m_chatsLock);
       Chat *chatObject = m_chats.get(username);
-      if (chatObject == nullptr)
+      if (newId) // Check group migration to supergroup
       {
-         chatObject = new Chat(chat);
-         m_chats.set(username, chatObject);
-         chatObject->save(m_storageManager);
+         if (chatObject != nullptr)
+         {
+            chatObject->id = newId;
+         }
+      }
+      else // Check and create chat object
+      {
+         if (chatObject == nullptr)
+         {
+            chatObject = new Chat(chat);
+            m_chats.set(username, chatObject);
+            chatObject->save(m_storageManager);
+         }
       }
       MutexUnlock(m_chatsLock);
 
